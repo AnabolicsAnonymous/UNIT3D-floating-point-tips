@@ -14,10 +14,13 @@
     'use strict';
 
     function enableFloatingPointTips() {
-        const tipInputs = document.querySelectorAll('input.post__tip-input');
+        const postTipInputs = document.querySelectorAll('input.post__tip-input');
+        const torrentTipInputs = document.querySelectorAll('input.form__text[name="bon"]');
+        
+        const allTipInputs = [...postTipInputs, ...torrentTipInputs];
 
         let modifiedCount = 0;
-        tipInputs.forEach(input => {
+        allTipInputs.forEach(input => {
             if (input.hasAttribute('pattern')) {
                 input.removeAttribute('pattern');
                 modifiedCount++;
@@ -33,19 +36,21 @@
         const observer = new MutationObserver(mutations => {
             let hasNewInputs = false;
 
-            mutations.forEach(mutation => {
-                if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-                    mutation.addedNodes.forEach(node => {
-                        if (node.nodeType === Node.ELEMENT_NODE) {
-                            if (node.classList && node.classList.contains('post__tip-input')) {
-                                hasNewInputs = true;
-                            } else if (node.querySelector && node.querySelector('.post__tip-input')) {
-                                hasNewInputs = true;
+                            mutations.forEach(mutation => {
+                    if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                        mutation.addedNodes.forEach(node => {
+                            if (node.nodeType === Node.ELEMENT_NODE) {
+                                if (node.classList && node.classList.contains('post__tip-input')) {
+                                    hasNewInputs = true;
+                                } else if (node.classList && node.classList.contains('form__text') && node.name === 'bon') {
+                                    hasNewInputs = true;
+                                } else if (node.querySelector && (node.querySelector('.post__tip-input') || node.querySelector('input.form__text[name="bon"]'))) {
+                                    hasNewInputs = true;
+                                }
                             }
-                        }
-                    });
-                }
-            });
+                        });
+                    }
+                });
 
             if (hasNewInputs) {
                 setTimeout(enableFloatingPointTips, 100);
