@@ -3,7 +3,7 @@
 // @version      1.0
 // @description  Allow floating point values in post tips
 // @match        https://upload.cx/*
-// @match        https:/lst.gg/*
+// @match        https://lst.gg/*
 // @match        https://fearnopeer.com/*
 // @match        https://ldu.to/*
 // @grant        none
